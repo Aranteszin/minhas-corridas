@@ -99,6 +99,17 @@ cd ~/Documents/painel-motorista && python3 -m http.server 4173
 
 ### Publicar uma alteração
 
+**É automático quando o Claude Code edita os arquivos.** Ao fim de cada sessão,
+um hook `Stop` (`.claude/settings.json` → `.claude/publicar.sh`) confere o
+projeto e, se passar, comita e publica sozinho.
+
+A conferência checa: `node --check` em `app.js` e `sw.js`, `manifest.json`
+válido e com os ícones 192 e 512, tags do HTML fechadas, chaves do CSS
+equilibradas, e se tudo que o `index.html` referencia existe de verdade.
+Se algo falhar, **nada é enviado** e o motivo vai para `.claude/publicar.log`.
+
+Editando à mão, fora do Claude Code, publique você mesmo:
+
 ```bash
 git add -A && git commit -m "o que mudou" && git push
 ```
