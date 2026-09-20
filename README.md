@@ -97,8 +97,23 @@ cd ~/Documents/painel-motorista && python3 -m http.server 4173
 > senão o servidor responde 404. Se acontecer, copie a pasta para fora de `~/Documents`
 > ou libere em *Ajustes do Sistema → Privacidade e Segurança → Arquivos e Pastas*.
 
-Ao publicar uma versão nova, mude `const CACHE = 'minhas-corridas-v1'` em `sw.js`
-para `v2`, `v3` etc. — é isso que faz o celular baixar os arquivos atualizados.
+### Publicar uma alteração
+
+```bash
+git add -A && git commit -m "o que mudou" && git push
+```
+
+O GitHub Pages reconstrói em cerca de 1 minuto. O celular pega a versão nova
+sozinho: o service worker tenta a rede primeiro e só cai no cache quando está
+offline. Não precisa mexer no `sw.js` a cada mudança.
+
+A única espera é o cache do navegador — o GitHub Pages manda `max-age=600`,
+então pode levar até **10 minutos** para o celular buscar os arquivos de novo.
+Para ver na hora, basta puxar a tela para baixo (recarregar) no app.
+
+Trocar o `v1` de `const CACHE = 'minhas-corridas-v1'` em `sw.js` só é necessário
+quando você quer apagar a cópia offline antiga de vez — por exemplo se renomear
+ou remover arquivos.
 
 ---
 
