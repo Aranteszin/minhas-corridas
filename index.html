@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#0b0f14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Minhas Corridas">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="styles.css">
+<title>Minhas Corridas</title>
+</head>
+<body>
+
+<!-- ============ PAINEL ============ -->
+<main id="view-painel" class="view">
+  <header class="topbar">
+    <div>
+      <p class="topbar-hello" id="saudacao">Olá</p>
+      <h1 class="topbar-title">Minhas Corridas</h1>
+    </div>
+  </header>
+
+  <div class="scroll">
+    <!-- Ações rápidas -->
+    <section class="quick">
+      <button class="quick-btn quick-jornada" data-novo="jornada">
+        <span class="quick-ico">🚗</span>
+        <span class="quick-txt">Lançar dia</span>
+      </button>
+      <button class="quick-btn quick-fuel" data-novo="abastecimento">
+        <span class="quick-ico">⛽</span>
+        <span class="quick-txt">Abastecer</span>
+      </button>
+      <button class="quick-btn quick-desp" data-novo="despesa">
+        <span class="quick-ico">🧾</span>
+        <span class="quick-txt">Despesa</span>
+      </button>
+    </section>
+
+    <!-- Primeira vez -->
+    <section class="card card-inicio" id="card-inicio" hidden>
+      <h2 class="card-title">Bem-vindo! 👋</h2>
+      <p class="inicio-txt">É simples: no fim do dia de trabalho, você toca em <b>Lançar dia</b> e coloca quanto ganhou, quantos km rodou e quantas horas ficou na rua.</p>
+      <p class="inicio-txt">Quando abastecer, toque em <b>Abastecer</b> e anote o valor e o km do painel.</p>
+      <p class="inicio-txt">Com isso o app mostra sozinho o <b>lucro de verdade</b>, quanto você ganha por hora, o consumo do carro e quando está na hora da revisão.</p>
+      <p class="inicio-dica">💡 Vale a pena passar em <b>Ajustes</b> e colocar seu nome e uma meta de ganho por dia.</p>
+    </section>
+
+    <!-- Metas -->
+    <section class="card" id="card-metas">
+      <div class="meta-row">
+        <div class="meta-head">
+          <span class="meta-nome">Meta de hoje</span>
+          <span class="meta-val" id="meta-dia-val">—</span>
+        </div>
+        <div class="bar"><div class="bar-fill" id="meta-dia-bar"></div></div>
+        <p class="meta-sub" id="meta-dia-sub"></p>
+      </div>
+      <div class="meta-row">
+        <div class="meta-head">
+          <span class="meta-nome">Meta da semana</span>
+          <span class="meta-val" id="meta-sem-val">—</span>
+        </div>
+        <div class="bar"><div class="bar-fill bar-fill-sem" id="meta-sem-bar"></div></div>
+        <p class="meta-sub" id="meta-sem-sub"></p>
+      </div>
+    </section>
+
+    <!-- Filtro de período -->
+    <nav class="segmented" id="segmented">
+      <button class="seg" data-periodo="hoje">Hoje</button>
+      <button class="seg" data-periodo="semana">Semana</button>
+      <button class="seg is-active" data-periodo="mes">Mês</button>
+      <button class="seg" data-periodo="tudo">Tudo</button>
+    </nav>
+
+    <!-- Destaque: lucro -->
+    <section class="hero" id="hero">
+      <p class="hero-label">Lucro líquido <span id="hero-periodo">no mês</span></p>
+      <p class="hero-value" id="hero-lucro">R$ 0,00</p>
+      <div class="hero-breakdown">
+        <div><span class="bd-label">Ganhos</span><span class="bd-val bd-pos" id="bd-ganhos">R$ 0,00</span></div>
+        <div><span class="bd-label">Combustível</span><span class="bd-val bd-neg" id="bd-combustivel">R$ 0,00</span></div>
+        <div><span class="bd-label">Despesas</span><span class="bd-val bd-neg" id="bd-despesas">R$ 0,00</span></div>
+      </div>
+    </section>
+
+    <!-- Indicadores -->
+    <section class="grid" id="grid-kpis">
+      <div class="kpi kpi-destaque">
+        <p class="kpi-label">Por hora <small>líquido</small></p>
+        <p class="kpi-value" id="kpi-hora">—</p>
+        <p class="kpi-foot" id="kpi-hora-foot"></p>
+      </div>
+      <div class="kpi">
+        <p class="kpi-label">Por km <small>bruto</small></p>
+        <p class="kpi-value" id="kpi-rskm">—</p>
+        <p class="kpi-foot" id="kpi-rskm-foot"></p>
+      </div>
+      <div class="kpi">
+        <p class="kpi-label">Custo por km</p>
+        <p class="kpi-value" id="kpi-custokm">—</p>
+        <p class="kpi-foot" id="kpi-custokm-foot"></p>
+      </div>
+      <div class="kpi">
+        <p class="kpi-label">Consumo real</p>
+        <p class="kpi-value" id="kpi-consumo">—</p>
+        <p class="kpi-foot" id="kpi-consumo-foot"></p>
+      </div>
+      <div class="kpi">
+        <p class="kpi-label">Km rodados</p>
+        <p class="kpi-value" id="kpi-km">—</p>
+        <p class="kpi-foot" id="kpi-km-foot"></p>
+      </div>
+      <div class="kpi">
+        <p class="kpi-label">Dias trabalhados</p>
+        <p class="kpi-value" id="kpi-dias">—</p>
+        <p class="kpi-foot" id="kpi-dias-foot"></p>
+      </div>
+    </section>
+
+    <!-- Gráfico -->
+    <section class="card" id="card-grafico">
+      <div class="card-head">
+        <h2 class="card-title">Ganho por dia</h2>
+        <span class="card-sub">últimos 14 dias</span>
+      </div>
+      <div class="chart" id="chart"></div>
+    </section>
+
+    <!-- Melhores dias -->
+    <section class="card" id="card-dow">
+      <div class="card-head">
+        <h2 class="card-title">Melhores dias da semana</h2>
+        <span class="card-sub">média de ganho</span>
+      </div>
+      <div id="dias-semana" class="dow"></div>
+    </section>
+
+    <!-- Manutenção -->
+    <section class="card" id="card-manut">
+      <div class="card-head">
+        <h2 class="card-title">Manutenção</h2>
+        <span class="card-sub" id="odometro-atual"></span>
+      </div>
+      <div id="manut-lista"></div>
+    </section>
+
+    <div class="spacer"></div>
+  </div>
+</main>
+
+<!-- ============ HISTÓRICO ============ -->
+<main id="view-historico" class="view" hidden>
+  <header class="topbar">
+    <div><h1 class="topbar-title">Histórico</h1></div>
+  </header>
+  <div class="scroll">
+    <nav class="segmented" id="hist-filtro">
+      <button class="seg is-active" data-tipo="todos">Tudo</button>
+      <button class="seg" data-tipo="jornada">Dias</button>
+      <button class="seg" data-tipo="abastecimento">Combustível</button>
+      <button class="seg" data-tipo="despesa">Despesas</button>
+    </nav>
+    <div id="hist-lista"></div>
+    <div class="spacer"></div>
+  </div>
+</main>
+
+<!-- ============ AJUSTES ============ -->
+<main id="view-ajustes" class="view" hidden>
+  <header class="topbar">
+    <div><h1 class="topbar-title">Ajustes</h1></div>
+  </header>
+  <div class="scroll">
+    <section class="card">
+      <h2 class="card-title">Seus dados</h2>
+      <label class="field">
+        <span class="field-label">Seu nome</span>
+        <input type="text" id="cfg-nome" placeholder="Ex: Seu José" autocomplete="off">
+      </label>
+      <label class="field">
+        <span class="field-label">Carro</span>
+        <input type="text" id="cfg-carro" placeholder="Ex: Onix 1.0 2019" autocomplete="off">
+      </label>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title">Metas</h2>
+      <label class="field">
+        <span class="field-label">Meta de ganho por dia (R$)</span>
+        <input type="text" inputmode="decimal" id="cfg-meta-dia" placeholder="250">
+      </label>
+      <label class="field">
+        <span class="field-label">Meta de ganho por semana (R$)</span>
+        <input type="text" inputmode="decimal" id="cfg-meta-semana" placeholder="1500">
+      </label>
+      <p class="hint">As metas usam o ganho bruto, que é o número que o app da Uber mostra.</p>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2 class="card-title">Manutenção</h2>
+        <button class="mini-btn" id="btn-nova-manut">+ Item</button>
+      </div>
+      <div id="cfg-manut"></div>
+      <p class="hint">O app compara com o km do último abastecimento pra avisar quando está perto.</p>
+    </section>
+
+    <section class="card">
+      <h2 class="card-title">Backup e dados</h2>
+      <button class="wide-btn" id="btn-export-csv">📊 Exportar planilha (CSV)</button>
+      <button class="wide-btn" id="btn-backup">💾 Salvar backup</button>
+      <button class="wide-btn" id="btn-restore">📂 Restaurar backup</button>
+      <input type="file" id="file-restore" accept="application/json,.json" hidden>
+      <p class="hint">Os dados ficam salvos só neste celular. Faça um backup de vez em quando e mande pro seu WhatsApp — se o celular quebrar, nada se perde.</p>
+      <button class="wide-btn wide-btn-danger" id="btn-apagar">🗑️ Apagar todos os dados</button>
+    </section>
+
+    <p class="version">Minhas Corridas · v1.0 · funciona sem internet</p>
+    <div class="spacer"></div>
+  </div>
+</main>
+
+<!-- ============ NAV ============ -->
+<nav class="tabbar">
+  <button class="tab is-active" data-view="painel"><span class="tab-ico">📊</span><span>Painel</span></button>
+  <button class="tab" data-view="historico"><span class="tab-ico">📅</span><span>Histórico</span></button>
+  <button class="tab" data-view="ajustes"><span class="tab-ico">⚙️</span><span>Ajustes</span></button>
+</nav>
+
+<!-- ============ MODAL ============ -->
+<div class="sheet-backdrop" id="backdrop" hidden></div>
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true">
+  <div class="sheet-grab"></div>
+  <header class="sheet-head">
+    <button class="sheet-cancel" id="sheet-cancel">Cancelar</button>
+    <h2 class="sheet-title" id="sheet-title">Novo</h2>
+    <button class="sheet-save" id="sheet-save">Salvar</button>
+  </header>
+  <form class="sheet-body" id="sheet-form" autocomplete="off"></form>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="app.js"></script>
+</body>
+</html>
